@@ -1,18 +1,12 @@
 name: Zad2 CI
-
 on:
   workflow_dispatch:
   push:
     tags:
       - 'v*'
-  
-
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - name: Github source code checkout
       uses: actions/checkout@v4
@@ -55,14 +49,13 @@ jobs:
       with:
         username: adrw246
         password: ${{ secrets.docker_token }}
-    - name: Docker Scout
-      id: docker-scout
-      uses: docker/scout-action@v1
+    - name: Scan image for vulnerabilities with Trivy
+      uses: aquasecurity/trivy-action@v0.11.0
       with:
-        command: cves
-        image: ${{ steps.meta.outputs.tags }}
-        only-severities: critical,high
-        exit-code: true
+        image-ref: ${{ steps.meta.outputs.tags }}
+        severity: HIGH,CRITICAL
+        exit-code: 1
+        format: table
     - name: Push Docker Image
       if: success()
       run: |
