@@ -49,13 +49,22 @@ jobs:
       with:
         username: adrw246
         password: ${{ secrets.docker_token }}
-    - name: Scan with trivy
+    - name: Scan with Trivy
+      id: trivy-scan
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: ${{ steps.meta.outputs.tags }}
         severity: HIGH,CRITICAL
         exit-code: 1
         format: table
+    - name: Summary of vulnerabilities
+      if: always()
+      run: |
+        echo "Trivy Scan Summary:" >> $GITHUB_STEP_SUMMARY
+        if [ -f ./trivy-report.txt ]; then
+          cat ./trivy-report.txt >> $GITHUB_STEP_SUMMARY
+        else
+          echo "No vulnerabilities detected or report missing." >> $GITHUB_STEP_SUMMARY
     - name: Push Docker Image
       if: success()
       run: |
