@@ -51,7 +51,7 @@ jobs:
         password: ${{ secrets.docker_token }}
     - name: Scan image for vulnerabilities with Trivy
       id: trivy-scan
-      uses: aquasecurity/trivy-action@master
+      uses: aquasecurity/trivy-action@v0.12.0
       with:
         image-ref: ${{ steps.meta.outputs.tags }}
         severity: HIGH,CRITICAL
@@ -67,7 +67,7 @@ jobs:
         else
           echo "No vulnerabilities detected or report missing." >> $GITHUB_STEP_SUMMARY
     - name: Push Docker Image
-      if: success()
+      if: always()
       run: |
         docker buildx imagetools create \
           --tag ghcr.io/adrianw246/last-image:latest \
