@@ -30,7 +30,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ github.actor  }}/lekki-obraz
+        images: ghcr.io/${{ github.actor  }}/lekki-obraz
         flavour: latest=false
         tags: |
           type=semver,priority=200,pattern={{version}}
