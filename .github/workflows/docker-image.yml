@@ -32,6 +32,8 @@ jobs:
       with:
         images: ghcr.io/adrianw246/lekki-obraz
         flavour: latest=false
+        labels:
+          org.opencontainers.image.source="https://github.com/adrianw246/zad2"
         tags: |
           type=semver,priority=200,pattern={{version}}
           type=sha,priority=100,prefix=sha-,format=short
